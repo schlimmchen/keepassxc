@@ -39,12 +39,18 @@ public:
     Q_DISABLE_COPY(DatabaseSettingsWidgetIcons);
     ~DatabaseSettingsWidgetIcons() override;
 
-    inline bool hasAdvancedMode() const override { return false; }
+    inline bool hasAdvancedMode() const override
+    {
+        return false;
+    }
 
 public slots:
     void initialize() override;
-    void uninitialize() override { };
-    inline bool save() override { return true; };
+    void uninitialize() override{};
+    inline bool save() override
+    {
+        return true;
+    };
 
 private slots:
     void selectionChanged();

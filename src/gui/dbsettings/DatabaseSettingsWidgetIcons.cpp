@@ -24,8 +24,8 @@
 #include "core/Entry.h"
 #include "core/Group.h"
 #include "core/Metadata.h"
-#include "gui/MessageBox.h"
 #include "gui/IconModels.h"
+#include "gui/MessageBox.h"
 
 DatabaseSettingsWidgetIcons::DatabaseSettingsWidgetIcons(QWidget* parent)
     : DatabaseSettingsWidget(parent)
@@ -39,8 +39,10 @@ DatabaseSettingsWidgetIcons::DatabaseSettingsWidgetIcons(QWidget* parent)
 
     connect(m_ui->deleteButton, SIGNAL(clicked()), SLOT(removeCustomIcon()));
     connect(m_ui->purgeButton, SIGNAL(clicked()), SLOT(purgeUnusedCustomIcons()));
-    connect(m_ui->customIconsView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(selectionChanged()));
+    connect(m_ui->customIconsView->selectionModel(),
+            SIGNAL(selectionChanged(QItemSelection, QItemSelection)),
+            this,
+            SLOT(selectionChanged()));
 }
 
 DatabaseSettingsWidgetIcons::~DatabaseSettingsWidgetIcons()
@@ -57,14 +59,16 @@ void DatabaseSettingsWidgetIcons::populateIcons(QSharedPointer<Database> db)
 void DatabaseSettingsWidgetIcons::initialize()
 {
     auto database = DatabaseSettingsWidget::getDatabase();
-    if(!database) { return; }
+    if (!database) {
+        return;
+    }
     populateIcons(database);
 }
 
 void DatabaseSettingsWidgetIcons::selectionChanged()
 {
     QList<QModelIndex> indexes = m_ui->customIconsView->selectionModel()->selectedIndexes();
-    if(indexes.isEmpty()) {
+    if (indexes.isEmpty()) {
         m_ui->deleteButton->setEnabled(false);
     } else {
         m_ui->deleteButton->setEnabled(true);
@@ -74,13 +78,15 @@ void DatabaseSettingsWidgetIcons::selectionChanged()
 void DatabaseSettingsWidgetIcons::removeCustomIcon()
 {
     auto database = DatabaseSettingsWidget::getDatabase();
-    if(!database) { return; }
+    if (!database) {
+        return;
+    }
 
     m_deletionDecision = MessageBox::NoButton;
 
     QList<QModelIndex> indexes = m_ui->customIconsView->selectionModel()->selectedIndexes();
     for (auto index : indexes) {
-      removeSingleCustomIcon(database, index);
+        removeSingleCustomIcon(database, index);
     }
 
     populateIcons(database);
@@ -116,16 +122,15 @@ void DatabaseSettingsWidgetIcons::removeSingleCustomIcon(QSharedPointer<Database
 
     int iconUseCount = entriesWithSelectedIcon.size() + groupsWithSameIcon.size();
     if (iconUseCount > 0) {
-        if(m_deletionDecision == MessageBox::NoButton) {
+        if (m_deletionDecision == MessageBox::NoButton) {
             m_deletionDecision = MessageBox::question(
-                    this,
-                    tr("Confirm Deletion"),
-                    tr("At least one of the selected icons is currently in use by at least one entry or group. "
-                       "The icons of all affected entries and groups will be replaced by the default icon. "
-                       "Are you sure you want to delete icons that are currently in use?"),
-                    MessageBox::Delete | MessageBox::Skip,
-                    MessageBox::Skip
-            );
+                this,
+                tr("Confirm Deletion"),
+                tr("At least one of the selected icons is currently in use by at least one entry or group. "
+                   "The icons of all affected entries and groups will be replaced by the default icon. "
+                   "Are you sure you want to delete icons that are currently in use?"),
+                MessageBox::Delete | MessageBox::Skip,
+                MessageBox::Skip);
         }
 
         if (m_deletionDecision == MessageBox::Skip) {
@@ -158,7 +163,9 @@ void DatabaseSettingsWidgetIcons::removeSingleCustomIcon(QSharedPointer<Database
 void DatabaseSettingsWidgetIcons::purgeUnusedCustomIcons()
 {
     auto database = DatabaseSettingsWidget::getDatabase();
-    if(!database) { return; }
+    if (!database) {
+        return;
+    }
 
     QList<Entry*> historyEntries;
     QSet<QUuid> historicIcons;
@@ -184,12 +191,16 @@ void DatabaseSettingsWidgetIcons::purgeUnusedCustomIcons()
     int purgeCounter = 0;
     QList<QUuid> customIcons = database->metadata()->customIconsOrder();
     for (QUuid iconUuid : customIcons) {
-        if (iconsInUse.contains(iconUuid)) { continue; }
+        if (iconsInUse.contains(iconUuid)) {
+            continue;
+        }
 
         if (historicIcons.contains(iconUuid)) {
             // Remove the icon from history entries using this icon
             for (Entry* historicEntry : asConst(historyEntries)) {
-                if (historicEntry->iconUuid() != iconUuid) { continue; }
+                if (historicEntry->iconUuid() != iconUuid) {
+                    continue;
+                }
                 historicEntry->setUpdateTimeinfo(false);
                 historicEntry->setIcon(0);
                 historicEntry->setUpdateTimeinfo(true);
@@ -202,16 +213,14 @@ void DatabaseSettingsWidgetIcons::purgeUnusedCustomIcons()
 
     if (0 == purgeCounter) {
         MessageBox::information(this,
-                tr("Custom Icons Are In Use"),
-                tr("All custom icons are in use by at least one entry or group."),
-                MessageBox::Ok);
+                                tr("Custom Icons Are In Use"),
+                                tr("All custom icons are in use by at least one entry or group."),
+                                MessageBox::Ok);
         return;
     }
 
     populateIcons(database);
 
-    MessageBox::information(this,
-            tr("Purged Unused Icons"),
-            tr("Purged %n icon(s) from the database.", "", purgeCounter),
-            MessageBox::Ok);
+    MessageBox::information(
+        this, tr("Purged Unused Icons"), tr("Purged %n icon(s) from the database.", "", purgeCounter), MessageBox::Ok);
 }
