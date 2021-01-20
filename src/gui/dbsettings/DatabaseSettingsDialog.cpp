@@ -117,7 +117,7 @@ DatabaseSettingsDialog::DatabaseSettingsDialog(QWidget* parent)
     m_ui->stackedWidget->addWidget(m_browserWidget);
 #endif
 
-    m_ui->categoryList->addCategory(tr("Maintenance"), icons()->icon("configure"));
+    m_ui->categoryList->addCategory(tr("Maintenance"), icons()->icon("support"));
     m_ui->stackedWidget->addWidget(m_maintenanceWidget);
 
     pageChanged();
