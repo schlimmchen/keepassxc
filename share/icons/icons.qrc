@@ -42,6 +42,7 @@
         <file>application/scalable/actions/group-edit.svg</file>
         <file>application/scalable/actions/group-empty-trash.svg</file>
         <file>application/scalable/actions/group-new.svg</file>
+        <file>application/scalable/actions/hammer-wrench.svg</file>
         <file>application/scalable/actions/health.svg</file>
         <file>application/scalable/actions/help-about.svg</file>
         <file>application/scalable/actions/hibp.svg</file>
@@ -64,7 +65,6 @@
         <file>application/scalable/actions/sort-alphabetical-ascending.svg</file>
         <file>application/scalable/actions/sort-alphabetical-descending.svg</file>
         <file>application/scalable/actions/statistics.svg</file>
-        <file>application/scalable/actions/support.svg</file>
         <file>application/scalable/actions/system-help.svg</file>
         <file>application/scalable/actions/system-search.svg</file>
         <file>application/scalable/actions/system-software-update.svg</file>
