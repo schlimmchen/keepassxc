@@ -15,8 +15,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "DatabaseSettingsWidgetIcons.h"
-#include "ui_DatabaseSettingsWidgetIcons.h"
+#include "DatabaseSettingsWidgetMaintenance.h"
+#include "ui_DatabaseSettingsWidgetMaintenance.h"
 
 #include <QProgressDialog>
 
@@ -27,9 +27,9 @@
 #include "gui/IconModels.h"
 #include "gui/MessageBox.h"
 
-DatabaseSettingsWidgetIcons::DatabaseSettingsWidgetIcons(QWidget* parent)
+DatabaseSettingsWidgetMaintenance::DatabaseSettingsWidgetMaintenance(QWidget* parent)
     : DatabaseSettingsWidget(parent)
-    , m_ui(new Ui::DatabaseSettingsWidgetIcons())
+    , m_ui(new Ui::DatabaseSettingsWidgetMaintenance())
     , m_customIconModel(new CustomIconModel(this))
     , m_deletionDecision(MessageBox::NoButton)
 {
@@ -45,18 +45,18 @@ DatabaseSettingsWidgetIcons::DatabaseSettingsWidgetIcons(QWidget* parent)
             SLOT(selectionChanged()));
 }
 
-DatabaseSettingsWidgetIcons::~DatabaseSettingsWidgetIcons()
+DatabaseSettingsWidgetMaintenance::~DatabaseSettingsWidgetMaintenance()
 {
 }
 
-void DatabaseSettingsWidgetIcons::populateIcons(QSharedPointer<Database> db)
+void DatabaseSettingsWidgetMaintenance::populateIcons(QSharedPointer<Database> db)
 {
     m_customIconModel->setIcons(db->metadata()->customIconsPixmaps(IconSize::Default),
                                 db->metadata()->customIconsOrder());
     m_ui->deleteButton->setEnabled(false);
 }
 
-void DatabaseSettingsWidgetIcons::initialize()
+void DatabaseSettingsWidgetMaintenance::initialize()
 {
     auto database = DatabaseSettingsWidget::getDatabase();
     if (!database) {
@@ -65,7 +65,7 @@ void DatabaseSettingsWidgetIcons::initialize()
     populateIcons(database);
 }
 
-void DatabaseSettingsWidgetIcons::selectionChanged()
+void DatabaseSettingsWidgetMaintenance::selectionChanged()
 {
     QList<QModelIndex> indexes = m_ui->customIconsView->selectionModel()->selectedIndexes();
     if (indexes.isEmpty()) {
@@ -75,7 +75,7 @@ void DatabaseSettingsWidgetIcons::selectionChanged()
     }
 }
 
-void DatabaseSettingsWidgetIcons::removeCustomIcon()
+void DatabaseSettingsWidgetMaintenance::removeCustomIcon()
 {
     auto database = DatabaseSettingsWidget::getDatabase();
     if (!database) {
@@ -92,7 +92,7 @@ void DatabaseSettingsWidgetIcons::removeCustomIcon()
     populateIcons(database);
 }
 
-void DatabaseSettingsWidgetIcons::removeSingleCustomIcon(QSharedPointer<Database> database, QModelIndex index)
+void DatabaseSettingsWidgetMaintenance::removeSingleCustomIcon(QSharedPointer<Database> database, QModelIndex index)
 {
     QUuid iconUuid = m_customIconModel->uuidFromIndex(index);
 
@@ -160,7 +160,7 @@ void DatabaseSettingsWidgetIcons::removeSingleCustomIcon(QSharedPointer<Database
     database->metadata()->removeCustomIcon(iconUuid);
 }
 
-void DatabaseSettingsWidgetIcons::purgeUnusedCustomIcons()
+void DatabaseSettingsWidgetMaintenance::purgeUnusedCustomIcons()
 {
     auto database = DatabaseSettingsWidget::getDatabase();
     if (!database) {

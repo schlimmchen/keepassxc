@@ -15,8 +15,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KEEPASSXC_DATABASESETTINGSWIDGETICONS_H
-#define KEEPASSXC_DATABASESETTINGSWIDGETICONS_H
+#ifndef KEEPASSXC_DATABASESETTINGSWIDGETMAINTENANCE_H
+#define KEEPASSXC_DATABASESETTINGSWIDGETMAINTENANCE_H
 
 #include "DatabaseSettingsWidget.h"
 
@@ -27,17 +27,17 @@ class CustomIconModel;
 class Database;
 namespace Ui
 {
-    class DatabaseSettingsWidgetIcons;
+    class DatabaseSettingsWidgetMaintenance;
 }
 
-class DatabaseSettingsWidgetIcons : public DatabaseSettingsWidget
+class DatabaseSettingsWidgetMaintenance : public DatabaseSettingsWidget
 {
     Q_OBJECT
 
 public:
-    explicit DatabaseSettingsWidgetIcons(QWidget* parent = nullptr);
-    Q_DISABLE_COPY(DatabaseSettingsWidgetIcons);
-    ~DatabaseSettingsWidgetIcons() override;
+    explicit DatabaseSettingsWidgetMaintenance(QWidget* parent = nullptr);
+    Q_DISABLE_COPY(DatabaseSettingsWidgetMaintenance);
+    ~DatabaseSettingsWidgetMaintenance() override;
 
     inline bool hasAdvancedMode() const override
     {
@@ -62,11 +62,11 @@ private:
     void removeSingleCustomIcon(QSharedPointer<Database> database, QModelIndex index);
 
 protected:
-    const QScopedPointer<Ui::DatabaseSettingsWidgetIcons> m_ui;
+    const QScopedPointer<Ui::DatabaseSettingsWidgetMaintenance> m_ui;
 
 private:
     CustomIconModel* const m_customIconModel;
     uint64_t m_deletionDecision;
 };
 
-#endif // KEEPASSXC_DATABASESETTINGSWIDGETICONS_H
+#endif // KEEPASSXC_DATABASESETTINGSWIDGETMAINTENANCE_H

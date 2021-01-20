@@ -32,7 +32,7 @@ class DatabaseSettingsWidgetDatabaseKey;
 #ifdef WITH_XC_BROWSER
 class DatabaseSettingsWidgetBrowser;
 #endif
-class DatabaseSettingsWidgetIcons;
+class DatabaseSettingsWidgetMaintenance;
 class QTabWidget;
 
 namespace Ui
@@ -91,7 +91,7 @@ private:
 #ifdef WITH_XC_BROWSER
     QPointer<DatabaseSettingsWidgetBrowser> m_browserWidget;
 #endif
-    QPointer<DatabaseSettingsWidgetIcons> m_iconsWidget;
+    QPointer<DatabaseSettingsWidgetMaintenance> m_maintenanceWidget;
 
     class ExtraPage;
     QList<ExtraPage> m_extraPages;
