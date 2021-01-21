@@ -94,6 +94,8 @@ EntryPreviewWidget::EntryPreviewWidget(QWidget* parent)
 #endif
 #if !defined(WITH_XC_AUTOTYPE)
     removeTab(m_ui->entryTabWidget, m_ui->entryAutotypeTab);
+    m_ui->groupAutotypeTitleLabel->setEnabled(false);
+    m_ui->groupAutotypeLabel->setEnabled(false);
 #endif
 }
 
