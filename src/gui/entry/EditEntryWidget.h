@@ -94,13 +94,15 @@ private slots:
     void updateCurrentAttribute();
     void protectCurrentAttribute(bool state);
     void toggleCurrentAttributeVisibility();
-    void updateAutoTypeEnabled();
     void openAutotypeHelp();
+#ifdef WITH_XC_AUTOTYPE
+    void updateAutoTypeEnabled();
     void insertAutoTypeAssoc();
     void removeAutoTypeAssoc();
     void loadCurrentAssoc(const QModelIndex& current);
     void clearCurrentAssoc();
     void applyCurrentAssoc();
+#endif
     void showHistoryEntry();
     void restoreHistoryEntry();
     void deleteHistoryEntry();
@@ -137,7 +139,9 @@ private:
     void setupMain();
     void setupAdvanced();
     void setupIcon();
+#ifdef WITH_XC_AUTOTYPE
     void setupAutoType();
+#endif
 #ifdef WITH_XC_BROWSER
     void setupBrowser();
 #endif

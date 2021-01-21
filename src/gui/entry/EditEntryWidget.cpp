@@ -71,7 +71,9 @@ EditEntryWidget::EditEntryWidget(QWidget* parent)
     , m_entry(nullptr)
     , m_mainUi(new Ui::EditEntryWidgetMain())
     , m_advancedUi(new Ui::EditEntryWidgetAdvanced())
+#ifdef WITH_XC_AUTOTYPE
     , m_autoTypeUi(new Ui::EditEntryWidgetAutoType())
+#endif
     , m_sshAgentUi(new Ui::EditEntryWidgetSSHAgent())
     , m_historyUi(new Ui::EditEntryWidgetHistory())
     , m_browserUi(new Ui::EditEntryWidgetBrowser())
@@ -104,7 +106,10 @@ EditEntryWidget::EditEntryWidget(QWidget* parent)
     setupMain();
     setupAdvanced();
     setupIcon();
+
+#ifdef WITH_XC_AUTOTYPE
     setupAutoType();
+#endif
 
 #ifdef WITH_XC_SSHAGENT
     setupSSHAgent();
@@ -224,6 +229,7 @@ void EditEntryWidget::openAutotypeHelp()
         QUrl("https://keepassxc.org/docs/KeePassXC_UserGuide.html#_configure_auto_type_sequences"));
 }
 
+#ifdef WITH_XC_AUTOTYPE
 void EditEntryWidget::setupAutoType()
 {
     m_autoTypeUi->setupUi(m_autoTypeWidget);
@@ -261,6 +267,7 @@ void EditEntryWidget::setupAutoType()
     connect(m_autoTypeUi->windowSequenceEdit, SIGNAL(textChanged(QString)), SLOT(applyCurrentAssoc()));
     // clang-format on
 }
+#endif
 
 #ifdef WITH_XC_BROWSER
 void EditEntryWidget::setupBrowser()
@@ -448,6 +455,7 @@ void EditEntryWidget::setupEntryUpdate()
     // Icon tab
     connect(m_iconsWidget, SIGNAL(widgetUpdated()), this, SLOT(setModified()));
 
+#ifdef WITH_XC_AUTOTYPE
     // Auto-Type tab
     connect(m_autoTypeUi->enableButton, SIGNAL(stateChanged(int)), this, SLOT(setModified()));
     connect(m_autoTypeUi->customWindowSequenceButton, SIGNAL(stateChanged(int)), this, SLOT(setModified()));
@@ -457,6 +465,7 @@ void EditEntryWidget::setupEntryUpdate()
     connect(m_autoTypeUi->sequenceEdit, SIGNAL(textChanged(QString)), this, SLOT(setModified()));
     connect(m_autoTypeUi->windowTitleCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setModified()));
     connect(m_autoTypeUi->windowTitleCombo, SIGNAL(editTextChanged(QString)), this, SLOT(setModified()));
+#endif
 
     // Properties and History tabs don't need extra connections
 
@@ -867,9 +876,11 @@ void EditEntryWidget::setForms(Entry* entry, bool restore)
     setupColorButton(true, entry->foregroundColor());
     setupColorButton(false, entry->backgroundColor());
     m_iconsWidget->setEnabled(!m_history);
+#ifdef WITH_XC_AUTOTYPE
     m_autoTypeUi->sequenceEdit->setReadOnly(m_history);
     m_autoTypeUi->windowTitleCombo->lineEdit()->setReadOnly(m_history);
     m_autoTypeUi->windowSequenceEdit->setReadOnly(m_history);
+#endif
     m_historyWidget->setEnabled(!m_history);
 
     m_mainUi->titleEdit->setText(entry->title());
@@ -913,6 +924,7 @@ void EditEntryWidget::setForms(Entry* entry, bool restore)
     iconStruct.number = entry->iconNumber();
     m_iconsWidget->load(entry->uuid(), m_db, iconStruct, entry->webUrl());
 
+#ifdef WITH_XC_AUTOTYPE
     m_autoTypeUi->enableButton->setChecked(entry->autoTypeEnabled());
     if (entry->defaultAutoTypeSequence().isEmpty()) {
         m_autoTypeUi->inheritSequenceButton->setChecked(true);
@@ -932,6 +944,7 @@ void EditEntryWidget::setForms(Entry* entry, bool restore)
         m_autoTypeUi->windowTitleCombo->refreshWindowList();
     }
     updateAutoTypeEnabled();
+#endif
 
 #ifdef WITH_XC_SSHAGENT
     if (sshAgent()->isEnabled()) {
@@ -1027,10 +1040,12 @@ bool EditEntryWidget::commitEntry()
         return true;
     }
 
+#ifdef WITH_XC_AUTOTYPE
     // Check Auto-Type validity early
     if (!AutoType::verifyAutoTypeSyntax(m_autoTypeUi->sequenceEdit->text())) {
         return false;
     }
+#endif
 
     if (m_advancedUi->attributesView->currentIndex().isValid() && m_advancedUi->attributesEdit->isEnabled()) {
         QString key = m_attributesModel->keyByIndex(m_advancedUi->attributesView->currentIndex());
@@ -1127,6 +1142,7 @@ void EditEntryWidget::updateEntryData(Entry* entry) const
         entry->setIcon(iconStruct.uuid);
     }
 
+#ifdef WITH_XC_AUTOTYPE
     entry->setAutoTypeEnabled(m_autoTypeUi->enableButton->isChecked());
     if (m_autoTypeUi->inheritSequenceButton->isChecked()) {
         entry->setDefaultAutoTypeSequence(QString());
@@ -1135,6 +1151,7 @@ void EditEntryWidget::updateEntryData(Entry* entry) const
     }
 
     entry->autoTypeAssociations()->copyDataFrom(m_autoTypeAssoc);
+#endif
 
 #ifdef WITH_XC_SSHAGENT
     if (sshAgent()->isEnabled()) {
@@ -1354,6 +1371,7 @@ void EditEntryWidget::toggleCurrentAttributeVisibility()
     }
 }
 
+#ifdef WITH_XC_AUTOTYPE
 void EditEntryWidget::updateAutoTypeEnabled()
 {
     bool autoTypeEnabled = m_autoTypeUi->enableButton->isChecked();
@@ -1444,6 +1462,7 @@ void EditEntryWidget::applyCurrentAssoc()
 
     m_autoTypeAssoc->update(index.row(), assoc);
 }
+#endif
 
 void EditEntryWidget::showHistoryEntry()
 {
