@@ -532,6 +532,9 @@ MainWindow::MainWindow()
     m_ui->actionCheckForUpdates->setVisible(false);
 #endif
 
+#ifndef WITH_XC_AUTOTYPE
+    m_ui->menuEntryAutoTypeWithSequence->menuAction()->setVisible(false);
+#endif
 #ifndef WITH_XC_NETWORKING
     m_ui->actionGroupDownloadFavicons->setVisible(false);
     m_ui->actionEntryDownloadIcon->setVisible(false);
@@ -777,6 +780,9 @@ void MainWindow::setMenuActionState(DatabaseWidget::Mode mode)
             m_ui->menuEntryCopyAttribute->setEnabled(singleEntrySelected);
             m_ui->menuEntryTotp->setEnabled(singleEntrySelected);
             m_ui->actionEntryAutoType->setEnabled(singleEntrySelected);
+#ifndef WITH_XC_AUTOTYPE
+            m_ui->menuEntryAutoTypeWithSequence->menuAction()->setVisible(false);
+#endif
             m_ui->menuEntryAutoTypeWithSequence->setEnabled(singleEntrySelected);
             m_ui->actionEntryAutoTypeUsername->setEnabled(singleEntrySelected && dbWidget->currentEntryHasUsername());
             m_ui->actionEntryAutoTypeUsernameEnter->setEnabled(singleEntrySelected
